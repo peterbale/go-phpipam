@@ -111,7 +111,7 @@ type AddressFirstFree struct {
   Ip      string `json:"ip"`
 }
 
-func login(hostname string, application string, username string, password string) (*Login) {
+func Login(hostname string, application string, username string, password string) (*Login) {
   var loginData = new(Login)
   client := &http.Client{}
   req, err := http.NewRequest("POST", "https://" + hostname + "/api/" + application + "/user/", nil)
@@ -128,7 +128,7 @@ func login(hostname string, application string, username string, password string
   return loginData
 }
 
-func sections(hostname string, application string, token string) (*Sections) {
+func Sections(hostname string, application string, token string) (*Sections) {
   var sectionsData = new(Sections)
   client := &http.Client{}
   req, err := http.NewRequest("GET", "https://" + hostname + "/api/" + application + "/sections/", nil)
@@ -145,7 +145,7 @@ func sections(hostname string, application string, token string) (*Sections) {
   return sectionsData
 }
 
-func sectionsSubnets(hostname string, application string, sectionId string, token string) (*SectionsSubnets) {
+func SectionsSubnets(hostname string, application string, sectionId string, token string) (*SectionsSubnets) {
   var sectionsSubnetsData = new(SectionsSubnets)
   client := &http.Client{}
   req, err := http.NewRequest("GET", "https://" + hostname + "/api/" + application + "/sections/" + sectionId + "/subnets/", nil)
@@ -162,7 +162,7 @@ func sectionsSubnets(hostname string, application string, sectionId string, toke
   return sectionsSubnetsData
 }
 
-func subnet(hostname string, application string, subnetId string, token string) (*Subnet) {
+func Subnet(hostname string, application string, subnetId string, token string) (*Subnet) {
   var subnetData = new(Subnet)
   client := &http.Client{}
   req, err := http.NewRequest("GET", "https://" + hostname + "/api/" + application + "/subnets/" + subnetId + "/", nil)
@@ -179,7 +179,7 @@ func subnet(hostname string, application string, subnetId string, token string) 
   return subnetData
 }
 
-func addressSearch(hostname string, application string, searchHostname string, token string) (*AddressSearch) {
+func AddressSearch(hostname string, application string, searchHostname string, token string) (*AddressSearch) {
   var addressSearchData = new(AddressSearch)
   client := &http.Client{}
   req, err := http.NewRequest("GET", "https://" + hostname + "/api/" + application + "/addresses/search_hostname/" + searchHostname + "/", nil)
@@ -196,7 +196,7 @@ func addressSearch(hostname string, application string, searchHostname string, t
   return addressSearchData
 }
 
-func addressPing(hostname string, application string, addressId string, token string) (*AddressPing) {
+func AddressPing(hostname string, application string, addressId string, token string) (*AddressPing) {
   var addressPingData = new(AddressPing)
   client := &http.Client{}
   req, err := http.NewRequest("GET", "https://" + hostname + "/api/" + application + "/addresses/" + addressId + "/ping/", nil)
@@ -213,7 +213,7 @@ func addressPing(hostname string, application string, addressId string, token st
   return addressPingData
 }
 
-func addressDelete(hostname string, application string, addressId string, token string) (*AddressDelete) {
+func AddressDelete(hostname string, application string, addressId string, token string) (*AddressDelete) {
   var addressDeleteData = new(AddressDelete)
   client := &http.Client{}
   req, err := http.NewRequest("DELETE", "https://" + hostname + "/api/" + application + "/addresses/" + addressId + "/", nil)
@@ -230,7 +230,7 @@ func addressDelete(hostname string, application string, addressId string, token 
   return addressDeleteData
 }
 
-func addressFirstFree(hostname string, application string, subnetId string, newHostname string, newOwner string, token string) (*AddressFirstFree) {
+func AddressFirstFree(hostname string, application string, subnetId string, newHostname string, newOwner string, token string) (*AddressFirstFree) {
   var addressFirstFreeData = new(AddressFirstFree)
   client := &http.Client{}
   reqBody := "hostname=" + newHostname + "&owner=" + newOwner
