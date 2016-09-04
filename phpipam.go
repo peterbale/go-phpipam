@@ -8,6 +8,12 @@ import (
   "strings"
 )
 
+type Client struct {
+	ApiKey      string
+	BaseUrl     string
+  Application string
+}
+
 type Calculation struct {
   Type          string `json:"Type"`
   IPAddress     string `json:"IP Address"`
@@ -109,6 +115,15 @@ type AddressFirstFree struct {
   Success bool `json:"success"`
   Message string `json:"message"`
   Ip      string `json:"ip"`
+}
+
+func New(hostname string, application string, username string, password string) (*Client, error) {
+  apiKey := NewLogin(hostname, application, username, password)
+  return &Client{
+    apiKey.Data.Token,
+    hostname,
+    application,
+  }, nil
 }
 
 func NewLogin(hostname string, application string, username string, password string) (*Login) {
