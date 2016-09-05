@@ -32,10 +32,10 @@ type SubnetData struct {
   Calculation   Calculation `json:"calculation"`
 }
 
-func GetSubnet(hostname string, application string, subnetId string, token string) (*Subnet) {
+func GetSubnet(server_url string, application string, subnetId string, token string) (*Subnet) {
   var subnetData = new(Subnet)
   client := &http.Client{}
-  req, err := http.NewRequest("GET", "https://" + hostname + "/api/" + application + "/subnets/" + subnetId + "/", nil)
+  req, err := http.NewRequest("GET", "https://" + server_url + "/api/" + application + "/subnets/" + subnetId + "/", nil)
   req.Header.Add("token", token)
   resp, err := client.Do(req)
   body, err := ioutil.ReadAll(resp.Body)

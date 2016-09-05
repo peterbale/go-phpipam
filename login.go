@@ -20,12 +20,18 @@ type LoginData struct {
   Test    string `json:"test"`
 }
 
-func NewLogin(hostname string, application string, username string, password string) (*Login) {
+func NewLogin(server_url string, application string, username string, password string) (*Login) {
   var loginData = new(Login)
   client := &http.Client{}
-  req, err := http.NewRequest("POST", "https://" + hostname + "/api/" + application + "/user/", nil)
+  req, err := http.NewRequest("POST", "https://" + server_url + "/api/" + application + "/user/", nil)
   req.SetBasicAuth(username, password)
+  if (err!=nil) {
+    fmt.Print(err)
+  }
   resp, err := client.Do(req)
+  if (err!=nil) {
+    fmt.Print(err)
+  }
   body, err := ioutil.ReadAll(resp.Body)
   if (err!=nil) {
     fmt.Print(err)

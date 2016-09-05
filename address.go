@@ -47,10 +47,10 @@ type AddressFirstFree struct {
   Ip      string `json:"ip"`
 }
 
-func GetAddressSearch(hostname string, application string, searchHostname string, token string) (*AddressSearch) {
+func GetAddressSearch(server_url string, application string, searchHostname string, token string) (*AddressSearch) {
   var addressSearchData = new(AddressSearch)
   client := &http.Client{}
-  req, err := http.NewRequest("GET", "https://" + hostname + "/api/" + application + "/addresses/search_hostname/" + searchHostname + "/", nil)
+  req, err := http.NewRequest("GET", "https://" + server_url + "/api/" + application + "/addresses/search_hostname/" + searchHostname + "/", nil)
   req.Header.Add("token", token)
   resp, err := client.Do(req)
   body, err := ioutil.ReadAll(resp.Body)
@@ -64,10 +64,10 @@ func GetAddressSearch(hostname string, application string, searchHostname string
   return addressSearchData
 }
 
-func GetAddressPing(hostname string, application string, addressId string, token string) (*AddressPing) {
+func GetAddressPing(server_url string, application string, addressId string, token string) (*AddressPing) {
   var addressPingData = new(AddressPing)
   client := &http.Client{}
-  req, err := http.NewRequest("GET", "https://" + hostname + "/api/" + application + "/addresses/" + addressId + "/ping/", nil)
+  req, err := http.NewRequest("GET", "https://" + server_url + "/api/" + application + "/addresses/" + addressId + "/ping/", nil)
   req.Header.Add("token", token)
   resp, err := client.Do(req)
   body, err := ioutil.ReadAll(resp.Body)
@@ -81,10 +81,10 @@ func GetAddressPing(hostname string, application string, addressId string, token
   return addressPingData
 }
 
-func DeleteAddress(hostname string, application string, addressId string, token string) (*AddressDelete) {
+func DeleteAddress(server_url string, application string, addressId string, token string) (*AddressDelete) {
   var addressDeleteData = new(AddressDelete)
   client := &http.Client{}
-  req, err := http.NewRequest("DELETE", "https://" + hostname + "/api/" + application + "/addresses/" + addressId + "/", nil)
+  req, err := http.NewRequest("DELETE", "https://" + server_url + "/api/" + application + "/addresses/" + addressId + "/", nil)
   req.Header.Add("token", token)
   resp, err := client.Do(req)
   body, err := ioutil.ReadAll(resp.Body)
@@ -98,11 +98,11 @@ func DeleteAddress(hostname string, application string, addressId string, token 
   return addressDeleteData
 }
 
-func CreateAddressFirstFree(hostname string, application string, subnetId string, newHostname string, newOwner string, token string) (*AddressFirstFree) {
+func CreateAddressFirstFree(server_url string, application string, subnetId string, newHostname string, newOwner string, token string) (*AddressFirstFree) {
   var addressFirstFreeData = new(AddressFirstFree)
   client := &http.Client{}
-  reqBody := "hostname=" + newHostname + "&owner=" + newOwner
-  req, err := http.NewRequest("POST", "https://" + hostname + "/api/" + application + "/addresses/first_free/" + subnetId + "/", strings.NewReader(reqBody))
+  reqBody := "server_url=" + newHostname + "&owner=" + newOwner
+  req, err := http.NewRequest("POST", "https://" + server_url + "/api/" + application + "/addresses/first_free/" + subnetId + "/", strings.NewReader(reqBody))
   req.Header.Add("token", token)
   resp, err := client.Do(req)
   body, err := ioutil.ReadAll(resp.Body)

@@ -33,10 +33,10 @@ type SectionsSubnetsData struct {
   Description   string `json:"description"`
 }
 
-func GetSections(hostname string, application string, token string) (*Sections) {
+func GetSections(server_url string, application string, token string) (*Sections) {
   var sectionsData = new(Sections)
   client := &http.Client{}
-  req, err := http.NewRequest("GET", "https://" + hostname + "/api/" + application + "/sections/", nil)
+  req, err := http.NewRequest("GET", "https://" + server_url + "/api/" + application + "/sections/", nil)
   req.Header.Add("token", token)
   resp, err := client.Do(req)
   body, err := ioutil.ReadAll(resp.Body)
@@ -50,10 +50,10 @@ func GetSections(hostname string, application string, token string) (*Sections) 
   return sectionsData
 }
 
-func GetSectionsSubnets(hostname string, application string, sectionId string, token string) (*SectionsSubnets) {
+func GetSectionsSubnets(server_url string, application string, sectionId string, token string) (*SectionsSubnets) {
   var sectionsSubnetsData = new(SectionsSubnets)
   client := &http.Client{}
-  req, err := http.NewRequest("GET", "https://" + hostname + "/api/" + application + "/sections/" + sectionId + "/subnets/", nil)
+  req, err := http.NewRequest("GET", "https://" + server_url + "/api/" + application + "/sections/" + sectionId + "/subnets/", nil)
   req.Header.Add("token", token)
   resp, err := client.Do(req)
   body, err := ioutil.ReadAll(resp.Body)
