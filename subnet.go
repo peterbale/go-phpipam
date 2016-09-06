@@ -1,7 +1,7 @@
 package phpipam
 
 import (
-  "fmt"
+  "log"
   "net/http"
   "io/ioutil"
   "encoding/json"
@@ -38,13 +38,19 @@ func GetSubnet(server_url string, application string, subnetId string, token str
   req, err := http.NewRequest("GET", "https://" + server_url + "/api/" + application + "/subnets/" + subnetId + "/", nil)
   req.Header.Add("token", token)
   resp, err := client.Do(req)
+  if (err!=nil) {
+    log.Fatal("Error Making Get Subnets Request: ", err)
+  }
   body, err := ioutil.ReadAll(resp.Body)
   if (err!=nil) {
-    fmt.Print(err)
+    log.Fatal("Error Reading Get Subnets Response: ", err)
   }
   json_err := json.Unmarshal([]byte(body), &subnetData)
   if(json_err != nil){
-      fmt.Println("Failed to Unmarshal:", json_err)
+    log.Fatal("Error Parsing Get Subnets Response: ", json_err)
+  }
+  if subnetData.Code != 200 {
+    log.Fatal("Get Subnets Failed: ", subnetData.Message)
   }
   return subnetData
 }

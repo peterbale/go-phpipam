@@ -1,7 +1,7 @@
 package phpipam
 
 import (
-  "fmt"
+  "log"
   "net/http"
   "io/ioutil"
   "encoding/json"
@@ -23,22 +23,22 @@ type LoginData struct {
 func NewLogin(server_url string, application string, username string, password string) (*Login) {
   var loginData = new(Login)
   client := &http.Client{}
-  req, err := http.NewRequest("POST", "https://" + server_url + "/api/" + application + "/user/", nil)
+  req, _ := http.NewRequest("POST", "https://" + server_url + "/api/" + application + "/user/", nil)
   req.SetBasicAuth(username, password)
-  if (err!=nil) {
-    fmt.Print(err)
-  }
   resp, err := client.Do(req)
   if (err!=nil) {
-    fmt.Print(err)
+    log.Fatal("Error Making Login Request: ", err)
   }
   body, err := ioutil.ReadAll(resp.Body)
   if (err!=nil) {
-    fmt.Print(err)
+    log.Fatal("Error Reading Login Response: ", err)
   }
   json_err := json.Unmarshal([]byte(body), &loginData)
   if(json_err != nil){
-      fmt.Println("Failed to Unmarshal:", json_err)
+    log.Fatal("Error Parsing Login Response: ", json_err)
+  }
+  if loginData.Code != 200 {
+    log.Fatal("Login Failed: ", loginData.Message)
   }
   return loginData
 }

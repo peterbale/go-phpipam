@@ -1,7 +1,7 @@
 package phpipam
 
 import (
-  "fmt"
+  "log"
   "net/http"
   "io/ioutil"
   "encoding/json"
@@ -39,13 +39,19 @@ func GetSections(server_url string, application string, token string) (*Sections
   req, err := http.NewRequest("GET", "https://" + server_url + "/api/" + application + "/sections/", nil)
   req.Header.Add("token", token)
   resp, err := client.Do(req)
+  if (err!=nil) {
+    log.Fatal("Error Making Get Sections Request: ", err)
+  }
   body, err := ioutil.ReadAll(resp.Body)
   if (err!=nil) {
-    fmt.Print(err)
+    log.Fatal("Error Reading Get Sections Response: ", err)
   }
   json_err := json.Unmarshal([]byte(body), &sectionsData)
   if(json_err != nil){
-      fmt.Println("Failed to Unmarshal:", json_err)
+    log.Fatal("Error Parsing Get Sections Response: ", json_err)
+  }
+  if sectionsData.Code != 200 {
+    log.Fatal("Get Sections Failed: ", sectionsData.Message)
   }
   return sectionsData
 }
@@ -56,13 +62,19 @@ func GetSectionsSubnets(server_url string, application string, sectionId string,
   req, err := http.NewRequest("GET", "https://" + server_url + "/api/" + application + "/sections/" + sectionId + "/subnets/", nil)
   req.Header.Add("token", token)
   resp, err := client.Do(req)
+  if (err!=nil) {
+    log.Fatal("Error Making Get Sections Subnets Request: ", err)
+  }
   body, err := ioutil.ReadAll(resp.Body)
   if (err!=nil) {
-    fmt.Print(err)
+    log.Fatal("Error Reading Get Sections Subnets Response: ", err)
   }
   json_err := json.Unmarshal([]byte(body), &sectionsSubnetsData)
   if(json_err != nil){
-      fmt.Println("Failed to Unmarshal:", json_err)
+    log.Fatal("Error Parsing Get Sections Subnets Response: ", json_err)
+  }
+  if sectionsSubnetsData.Code != 200 {
+    log.Fatal("Get Sections Failed: ", sectionsSubnetsData.Message)
   }
   return sectionsSubnetsData
 }
