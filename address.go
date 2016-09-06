@@ -1,11 +1,11 @@
 package phpipam
 
 import (
-  "log"
   "net/http"
   "io/ioutil"
   "encoding/json"
   "strings"
+  "errors"
 )
 
 type AddressSearch struct {
@@ -47,84 +47,80 @@ type AddressFirstFree struct {
   Ip      string `json:"ip"`
 }
 
-func GetAddressSearch(server_url string, application string, searchHostname string, token string) (*AddressSearch) {
+func GetAddressSearch(server_url string, application string, searchHostname string, token string) (*AddressSearch, error) {
   var addressSearchData = new(AddressSearch)
   client := &http.Client{}
   req, err := http.NewRequest("GET", "https://" + server_url + "/api/" + application + "/addresses/search_hostname/" + searchHostname + "/", nil)
   req.Header.Add("token", token)
   resp, err := client.Do(req)
   if (err!=nil) {
-    log.Fatal("Error Making Address Search Request: ", err)
+    return addressSearchData, err
   }
   body, err := ioutil.ReadAll(resp.Body)
   if (err!=nil) {
-    log.Fatal("Error Reading Address Search Response: ", err)
+    return addressSearchData, err
   }
-  json_err := json.Unmarshal([]byte(body), &addressSearchData)
-  if(json_err != nil){
-    log.Fatal("Error Parsing Address Search Response: ", json_err)
+  err = json.Unmarshal([]byte(body), &addressSearchData)
+  if(err != nil){
+    return addressSearchData, err
   }
-  if addressSearchData.Code == 200 {
-    // All is good
-  } else if addressSearchData.Code == 404 {
-    // Not found but all is still good
+  if addressSearchData.Code == 200 || addressSearchData.Code == 404 {
+    // Accepted responses
   } else {
-    log.Fatal("Address Search Failed: ", addressSearchData.Message)
+    return addressSearchData, errors.New(addressSearchData.Message)
   }
-  return addressSearchData
+  return addressSearchData, nil
 }
 
-func GetAddressPing(server_url string, application string, addressId string, token string) (*AddressPing) {
+func GetAddressPing(server_url string, application string, addressId string, token string) (*AddressPing, error) {
   var addressPingData = new(AddressPing)
   client := &http.Client{}
   req, err := http.NewRequest("GET", "https://" + server_url + "/api/" + application + "/addresses/" + addressId + "/ping/", nil)
   req.Header.Add("token", token)
   resp, err := client.Do(req)
   if (err!=nil) {
-    log.Fatal("Error Making Address Ping Request: ", err)
+    return addressPingData, err
   }
   body, err := ioutil.ReadAll(resp.Body)
   if (err!=nil) {
-    log.Fatal("Error Reading Address Ping Response: ", err)
+    return addressPingData, err
   }
-  json_err := json.Unmarshal([]byte(body), &addressPingData)
-  if(json_err != nil){
-    log.Fatal("Error Parsing Address Ping Response: ", json_err)
+  err = json.Unmarshal([]byte(body), &addressPingData)
+  if(err != nil){
+    return addressPingData, err
   }
-  if addressPingData.Code == 200 {
-    // All is good
-  } else if addressPingData.Code == 404 {
-    // Not found but all is still good
+  if addressPingData.Code == 200 || addressPingData.Code == 404 {
+    // Accepted responses
   } else {
-    log.Fatal("Address Ping Failed: ", addressPingData.Message)
+    return addressPingData, errors.New(addressPingData.Message)
   }
-  return addressPingData
+  return addressPingData, nil
 }
 
-func DeleteAddress(server_url string, application string, addressId string, token string) (*AddressDelete) {
+func DeleteAddress(server_url string, application string, addressId string, token string) (*AddressDelete, error) {
   var addressDeleteData = new(AddressDelete)
   client := &http.Client{}
   req, err := http.NewRequest("DELETE", "https://" + server_url + "/api/" + application + "/addresses/" + addressId + "/", nil)
   req.Header.Add("token", token)
   resp, err := client.Do(req)
   if (err!=nil) {
-    log.Fatal("Error Making Delete Address Request: ", err)
+    return addressDeleteData, err
   }
   body, err := ioutil.ReadAll(resp.Body)
   if (err!=nil) {
-    log.Fatal("Error Reading Delete Address Response: ", err)
+    return addressDeleteData, err
   }
-  json_err := json.Unmarshal([]byte(body), &addressDeleteData)
-  if(json_err != nil){
-    log.Fatal("Error Parsing Delete Address Response: ", json_err)
+  err = json.Unmarshal([]byte(body), &addressDeleteData)
+  if(err != nil){
+    return addressDeleteData, err
   }
-  if addressDeleteData.Code == 200 {
-    log.Fatal("Delete Address Failed: ", addressDeleteData.Message)
+  if addressDeleteData.Code != 200 {
+    return addressDeleteData, errors.New(addressDeleteData.Message)
   }
-  return addressDeleteData
+  return addressDeleteData, nil
 }
 
-func CreateAddressFirstFree(server_url string, application string, subnetId string, newHostname string, newOwner string, token string) (*AddressFirstFree) {
+func CreateAddressFirstFree(server_url string, application string, subnetId string, newHostname string, newOwner string, token string) (*AddressFirstFree, error) {
   var addressFirstFreeData = new(AddressFirstFree)
   client := &http.Client{}
   reqBody := "hostname=" + newHostname + "&owner=" + newOwner
@@ -132,18 +128,18 @@ func CreateAddressFirstFree(server_url string, application string, subnetId stri
   req.Header.Add("token", token)
   resp, err := client.Do(req)
   if (err!=nil) {
-    log.Fatal("Error Making Create Address First Free Request: ", err)
+    return addressFirstFreeData, err
   }
   body, err := ioutil.ReadAll(resp.Body)
   if (err!=nil) {
-    log.Fatal("Error Reading Create Address First Free Response: ", err)
+    return addressFirstFreeData, err
   }
   json_err := json.Unmarshal([]byte(body), &addressFirstFreeData)
   if(json_err != nil){
-    log.Fatal("Error Parsing Create Address First Free Response: ", json_err)
+    return addressFirstFreeData, err
   }
-  if addressFirstFreeData.Code == 201 {
-    log.Fatal("Create Address First Free Failed: ", addressFirstFreeData.Message)
+  if addressFirstFreeData.Code != 201 {
+    return addressFirstFreeData, errors.New(addressFirstFreeData.Message)
   }
-  return addressFirstFreeData
+  return addressFirstFreeData, nil
 }

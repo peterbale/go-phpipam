@@ -1,7 +1,7 @@
 package phpipam
 
 import (
-  "log"
+  "errors"
   "net/http"
   "io/ioutil"
   "encoding/json"
@@ -33,48 +33,48 @@ type SectionsSubnetsData struct {
   Description   string `json:"description"`
 }
 
-func GetSections(server_url string, application string, token string) (*Sections) {
+func GetSections(server_url string, application string, token string) (*Sections, error) {
   var sectionsData = new(Sections)
   client := &http.Client{}
   req, err := http.NewRequest("GET", "https://" + server_url + "/api/" + application + "/sections/", nil)
   req.Header.Add("token", token)
   resp, err := client.Do(req)
   if (err!=nil) {
-    log.Fatal("Error Making Get Sections Request: ", err)
+    return sectionsData, err
   }
   body, err := ioutil.ReadAll(resp.Body)
   if (err!=nil) {
-    log.Fatal("Error Reading Get Sections Response: ", err)
+    return sectionsData, err
   }
-  json_err := json.Unmarshal([]byte(body), &sectionsData)
-  if(json_err != nil){
-    log.Fatal("Error Parsing Get Sections Response: ", json_err)
+  err = json.Unmarshal([]byte(body), &sectionsData)
+  if(err != nil){
+    return sectionsData, err
   }
   if sectionsData.Code != 200 {
-    log.Fatal("Get Sections Failed: ", sectionsData.Message)
+    return sectionsData, errors.New(sectionsData.Message)
   }
-  return sectionsData
+  return sectionsData, nil
 }
 
-func GetSectionsSubnets(server_url string, application string, sectionId string, token string) (*SectionsSubnets) {
+func GetSectionsSubnets(server_url string, application string, sectionId string, token string) (*SectionsSubnets, error) {
   var sectionsSubnetsData = new(SectionsSubnets)
   client := &http.Client{}
   req, err := http.NewRequest("GET", "https://" + server_url + "/api/" + application + "/sections/" + sectionId + "/subnets/", nil)
   req.Header.Add("token", token)
   resp, err := client.Do(req)
   if (err!=nil) {
-    log.Fatal("Error Making Get Sections Subnets Request: ", err)
+    return sectionsSubnetsData, err
   }
   body, err := ioutil.ReadAll(resp.Body)
   if (err!=nil) {
-    log.Fatal("Error Reading Get Sections Subnets Response: ", err)
+    return sectionsSubnetsData, err
   }
-  json_err := json.Unmarshal([]byte(body), &sectionsSubnetsData)
-  if(json_err != nil){
-    log.Fatal("Error Parsing Get Sections Subnets Response: ", json_err)
+  err = json.Unmarshal([]byte(body), &sectionsSubnetsData)
+  if(err != nil){
+    return sectionsSubnetsData, err
   }
   if sectionsSubnetsData.Code != 200 {
-    log.Fatal("Get Sections Failed: ", sectionsSubnetsData.Message)
+    return sectionsSubnetsData, errors.New(sectionsSubnetsData.Message)
   }
-  return sectionsSubnetsData
+  return sectionsSubnetsData, nil
 }

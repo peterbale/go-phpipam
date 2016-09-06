@@ -1,7 +1,7 @@
 package phpipam
 
 import (
-  "log"
+  "errors"
   "net/http"
   "io/ioutil"
   "encoding/json"
@@ -32,25 +32,25 @@ type SubnetData struct {
   Calculation   Calculation `json:"calculation"`
 }
 
-func GetSubnet(server_url string, application string, subnetId string, token string) (*Subnet) {
+func GetSubnet(server_url string, application string, subnetId string, token string) (*Subnet, error) {
   var subnetData = new(Subnet)
   client := &http.Client{}
   req, err := http.NewRequest("GET", "https://" + server_url + "/api/" + application + "/subnets/" + subnetId + "/", nil)
   req.Header.Add("token", token)
   resp, err := client.Do(req)
   if (err!=nil) {
-    log.Fatal("Error Making Get Subnets Request: ", err)
+    return subnetData, err
   }
   body, err := ioutil.ReadAll(resp.Body)
   if (err!=nil) {
-    log.Fatal("Error Reading Get Subnets Response: ", err)
+    return subnetData, err
   }
-  json_err := json.Unmarshal([]byte(body), &subnetData)
-  if(json_err != nil){
-    log.Fatal("Error Parsing Get Subnets Response: ", json_err)
+  err = json.Unmarshal([]byte(body), &subnetData)
+  if(err != nil){
+    return subnetData, err
   }
   if subnetData.Code != 200 {
-    log.Fatal("Get Subnets Failed: ", subnetData.Message)
+    return subnetData, errors.New(subnetData.Message)
   }
-  return subnetData
+  return subnetData, nil
 }

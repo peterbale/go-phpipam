@@ -6,11 +6,14 @@ type Client struct {
   Application string
 }
 
-func New(hostname string, application string, username string, password string) (*Client) {
-  apiKey := NewLogin(hostname, application, username, password)
+func New(hostname string, application string, username string, password string) (*Client, error) {
+  apiKey, err := NewLogin(hostname, application, username, password)
+	if (err!=nil) {
+    return nil, err
+  }
   return &Client{
     Token: 				apiKey.Data.Token,
     ServerUrl:		hostname,
     Application:	application,
-  }
+  }, nil
 }
