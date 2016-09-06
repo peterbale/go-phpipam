@@ -101,7 +101,7 @@ func DeleteAddress(server_url string, application string, addressId string, toke
 func CreateAddressFirstFree(server_url string, application string, subnetId string, newHostname string, newOwner string, token string) (*AddressFirstFree) {
   var addressFirstFreeData = new(AddressFirstFree)
   client := &http.Client{}
-  reqBody := "server_url=" + newHostname + "&owner=" + newOwner
+  reqBody := "hostname=" + newHostname + "&owner=" + newOwner
   req, err := http.NewRequest("POST", "https://" + server_url + "/api/" + application + "/addresses/first_free/" + subnetId + "/", strings.NewReader(reqBody))
   req.Header.Add("token", token)
   resp, err := client.Do(req)
