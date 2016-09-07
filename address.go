@@ -75,6 +75,12 @@ type AddressSearchIpData struct {
   Hostname    string `json:"hostname"`
 }
 
+type UpdateAddress struct {
+  Code    int `json:"code"`
+  Success bool `json:"success"`
+  Message string `json:"message"`
+}
+
 func GetAddress(server_url string, application string, addressId string, token string) (*Address, error) {
   var addressData = new(Address)
   client := &http.Client{}
@@ -218,4 +224,28 @@ func GetAddressSearchIp(server_url string, application string, address string, t
     return addressSearchIpData, errors.New(addressSearchIpData.Message)
   }
   return addressSearchIpData, nil
+}
+
+func PatchUpdateAddress(server_url string, application string, newHostname string, addressId string, token string) (*UpdateAddress, error) {
+  var updateAddressData = new(UpdateAddress)
+  client := &http.Client{}
+  reqBody := "hostname=" + newHostname
+  req, err := http.NewRequest("PATCH", "https://" + server_url + "/api/" + application + "/addresses/" + addressId + "/", strings.NewReader(reqBody))
+  req.Header.Add("token", token)
+  resp, err := client.Do(req)
+  if (err!=nil) {
+    return updateAddressData, err
+  }
+  body, err := ioutil.ReadAll(resp.Body)
+  if (err!=nil) {
+    return updateAddressData, err
+  }
+  json_err := json.Unmarshal([]byte(body), &updateAddressData)
+  if(json_err != nil){
+    return updateAddressData, err
+  }
+  if updateAddressData.Code != 200 {
+    return updateAddressData, errors.New(updateAddressData.Message)
+  }
+  return updateAddressData, nil
 }
