@@ -61,6 +61,20 @@ type AddressFirstFree struct {
   Ip      string `json:"ip"`
 }
 
+type AddressSearchIp struct {
+  Code    int `json:"code"`
+  Success bool `json:"success"`
+  Data    []AddressSearchIpData `json:"data"`
+  Message string `json:"message"`
+}
+
+type AddressSearchIpData struct {
+  Id          string `json:"id"`
+  SubnetId    string `json:"subnetId"`
+  Ip          string `json:"ip"`
+  Hostname    string `json:"description"`
+}
+
 func GetAddress(server_url string, application string, addressId string, token string) (*Address, error) {
   var addressData = new(Address)
   client := &http.Client{}
@@ -181,4 +195,27 @@ func CreateAddressFirstFree(server_url string, application string, subnetId stri
     return addressFirstFreeData, errors.New(addressFirstFreeData.Message)
   }
   return addressFirstFreeData, nil
+}
+
+func GetAddressSearchIp(server_url string, application string, address string, token string) (*AddressSearchIp, error) {
+  var addressSearchIpData = new(AddressSearchIp)
+  client := &http.Client{}
+  req, err := http.NewRequest("GET", "https://" + server_url + "/api/" + application + "/addresses/search/" + address + "/", nil))
+  req.Header.Add("token", token)
+  resp, err := client.Do(req)
+  if (err!=nil) {
+    return addressSearchIpData, err
+  }
+  body, err := ioutil.ReadAll(resp.Body)
+  if (err!=nil) {
+    return addressSearchIpData, err
+  }
+  json_err := json.Unmarshal([]byte(body), &addressSearchIpData)
+  if(json_err != nil){
+    return addressSearchIpData, err
+  }
+  if addressSearchIpData.Code != 201 {
+    return addressSearchIpData, errors.New(addressSearchIpData.Message)
+  }
+  return addressSearchIpData, nil
 }
