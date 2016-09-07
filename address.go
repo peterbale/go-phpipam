@@ -61,7 +61,7 @@ type AddressFirstFree struct {
   Ip      string `json:"ip"`
 }
 
-func GetAddress(server_url string, application string, addressId string, token string) (*AddressPing, error) {
+func GetAddress(server_url string, application string, addressId string, token string) (*Address, error) {
   var addressData = new(Address)
   client := &http.Client{}
   req, err := http.NewRequest("GET", "https://" + server_url + "/api/" + application + "/addresses/" + addressId + "/", nil)
