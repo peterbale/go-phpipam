@@ -69,7 +69,7 @@ func GetSections(server_url string, application string, token string) (*Sections
   return sectionsData, nil
 }
 
-func GetSection(server_url string, application string, sectionId string, token string) (*Sections, error) {
+func GetSection(server_url string, application string, sectionId string, token string) (*Section, error) {
   var sectionData = new(Section)
   client := &http.Client{}
   req, err := http.NewRequest("GET", "https://" + server_url + "/api/" + application + "/sections/" + sectionId + "/", nil)
