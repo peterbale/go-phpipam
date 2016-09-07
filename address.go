@@ -8,6 +8,20 @@ import (
   "errors"
 )
 
+type Address struct {
+  Code    int `json:"code"`
+  Success bool `json:"success"`
+  Data    AddressData `json:"data"`
+  Message string `json:"message"`
+}
+
+type AddressData struct {
+  Id        string `json:"id"`
+  SubnetId  string `json:"subnetId"`
+  Ip        string `json:"ip"`
+  Hostname  string `json:"hostname"`
+}
+
 type AddressSearch struct {
   Code    int `json:"code"`
   Success bool `json:"success"`
@@ -45,6 +59,31 @@ type AddressFirstFree struct {
   Success bool `json:"success"`
   Message string `json:"message"`
   Ip      string `json:"ip"`
+}
+
+func GetAddress(server_url string, application string, addressId string, token string) (*AddressPing, error) {
+  var addressData = new(Address)
+  client := &http.Client{}
+  req, err := http.NewRequest("GET", "https://" + server_url + "/api/" + application + "/addresses/" + addressId + "/", nil)
+  req.Header.Add("token", token)
+  resp, err := client.Do(req)
+  if (err!=nil) {
+    return addressData, err
+  }
+  body, err := ioutil.ReadAll(resp.Body)
+  if (err!=nil) {
+    return addressData, err
+  }
+  err = json.Unmarshal([]byte(body), &addressData)
+  if(err != nil){
+    return addressData, err
+  }
+  if addressData.Code == 200 || addressData.Code == 404 {
+    // Accepted responses
+  } else {
+    return addressData, errors.New(addressData.Message)
+  }
+  return addressData, nil
 }
 
 func GetAddressSearch(server_url string, application string, searchHostname string, token string) (*AddressSearch, error) {
