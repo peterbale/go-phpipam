@@ -200,7 +200,7 @@ func CreateAddressFirstFree(server_url string, application string, subnetId stri
 func GetAddressSearchIp(server_url string, application string, address string, token string) (*AddressSearchIp, error) {
   var addressSearchIpData = new(AddressSearchIp)
   client := &http.Client{}
-  req, err := http.NewRequest("GET", "https://" + server_url + "/api/" + application + "/addresses/search/" + address + "/", nil))
+  req, err := http.NewRequest("GET", "https://" + server_url + "/api/" + application + "/addresses/search/" + address + "/", nil)
   req.Header.Add("token", token)
   resp, err := client.Do(req)
   if (err!=nil) {
