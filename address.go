@@ -72,7 +72,7 @@ type AddressSearchIpData struct {
   Id          string `json:"id"`
   SubnetId    string `json:"subnetId"`
   Ip          string `json:"ip"`
-  Hostname    string `json:"description"`
+  Hostname    string `json:"hostname"`
 }
 
 func GetAddress(server_url string, application string, addressId string, token string) (*Address, error) {
@@ -214,7 +214,7 @@ func GetAddressSearchIp(server_url string, application string, address string, t
   if(json_err != nil){
     return addressSearchIpData, err
   }
-  if addressSearchIpData.Code != 201 {
+  if addressSearchIpData.Code != 200 {
     return addressSearchIpData, errors.New(addressSearchIpData.Message)
   }
   return addressSearchIpData, nil
