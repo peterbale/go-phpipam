@@ -7,10 +7,15 @@ import (
   "encoding/json"
 )
 
+type Gateway struct {
+  IPAddress string `json:"ip_addr"`
+}
+
 type Calculation struct {
   Type          string `json:"Type"`
   IPAddress     string `json:"IP Address"`
   Network       string `json:"Network"`
+  Broadcast     string `json:"Broadcast"`
   Broadcast     string `json:"Broadcast"`
   BitMask       string `json:"Subnet bitmask"`
   NumberOfHosts int `json:"Number of hosts"`
@@ -30,6 +35,7 @@ type SubnetData struct {
   SectionId     string `json:"sectionId"`
   Description   string `json:"description"`
   IsFull        string `json:"isFull"`
+  Calculation   Gateway `json:"gateway"`
   Calculation   Calculation `json:"calculation"`
 }
 
