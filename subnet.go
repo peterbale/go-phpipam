@@ -16,7 +16,6 @@ type Calculation struct {
   IPAddress     string `json:"IP Address"`
   Network       string `json:"Network"`
   Broadcast     string `json:"Broadcast"`
-  Broadcast     string `json:"Broadcast"`
   BitMask       string `json:"Subnet bitmask"`
   NumberOfHosts int `json:"Number of hosts"`
 }
