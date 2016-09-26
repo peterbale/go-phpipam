@@ -35,7 +35,7 @@ type SubnetData struct {
   SectionId     string `json:"sectionId"`
   Description   string `json:"description"`
   IsFull        string `json:"isFull"`
-  Calculation   Gateway `json:"gateway"`
+  Gateway       Gateway `json:"gateway"`
   Calculation   Calculation `json:"calculation"`
 }
 
