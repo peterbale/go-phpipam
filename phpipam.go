@@ -1,5 +1,10 @@
 package phpipam
 
+import (
+		"net/http"
+		"io/ioutil"
+)
+
 type Client struct {
 	Token				string
 	ServerUrl		string
@@ -16,4 +21,19 @@ func New(hostname string, application string, username string, password string) 
     ServerUrl:		hostname,
     Application:	application,
   }, nil
+}
+
+func (c *Client) Do(req *http.Request) ([]byte, error) {
+	var body []byte
+	client := &http.Client{}
+	req.Header.Add("token", c.Token)
+	resp, err := client.Do(req)
+	if err!=nil {
+		return body, err
+	}
+	body, err = ioutil.ReadAll(resp.Body)
+	if err!=nil {
+		return body, err
+	}
+	return body, nil
 }

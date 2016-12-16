@@ -10,14 +10,12 @@ import (
 type Login struct {
   Code    int `json:"code"`
   Success bool `json:"success"`
-  Data    LoginData `json:"data"`
+  Data struct {
+    Token   string `json:"token"`
+    Expires string `json:"expires"`
+    Test    string `json:"test"`
+  } `json:"data"`
   Message string `json:"message"`
-}
-
-type LoginData struct {
-  Token   string `json:"token"`
-  Expires string `json:"expires"`
-  Test    string `json:"test"`
 }
 
 func NewLogin(server_url string, application string, username string, password string) (*Login, error) {
