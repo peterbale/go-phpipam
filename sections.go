@@ -46,7 +46,7 @@ type SectionsSubnets struct {
 // Sections struct and error
 func (c *Client) GetSections() (Sections, error) {
 	var sectionsData Sections
-	req, _ := http.NewRequest("GET", "https://"+c.ServerURL+"/api/"+c.Application+"/sections/", nil)
+	req, _ := http.NewRequest("GET", c.ServerURL+"/api/"+c.Application+"/sections/", nil)
 	body, err := c.Do(req)
 	if err != nil {
 		return sectionsData, err
@@ -65,7 +65,7 @@ func (c *Client) GetSections() (Sections, error) {
 // using sectionID string, returns Section struct and error
 func (c *Client) GetSection(sectionID string) (Section, error) {
 	var sectionData Section
-	req, _ := http.NewRequest("GET", "https://"+c.ServerURL+"/api/"+c.Application+"/sections/"+sectionID+"/", nil)
+	req, _ := http.NewRequest("GET", c.ServerURL+"/api/"+c.Application+"/sections/"+sectionID+"/", nil)
 	body, err := c.Do(req)
 	if err != nil {
 		return sectionData, err
@@ -85,7 +85,7 @@ func (c *Client) GetSection(sectionID string) (Section, error) {
 // error
 func (c *Client) GetSectionsSubnets(sectionID string) (SectionsSubnets, error) {
 	var sectionsSubnetsData SectionsSubnets
-	req, _ := http.NewRequest("GET", "https://"+c.ServerURL+"/api/"+c.Application+"/sections/"+sectionID+"/subnets/", nil)
+	req, _ := http.NewRequest("GET", c.ServerURL+"/api/"+c.Application+"/sections/"+sectionID+"/subnets/", nil)
 	body, err := c.Do(req)
 	if err != nil {
 		return sectionsSubnetsData, err

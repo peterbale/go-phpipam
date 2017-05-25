@@ -36,7 +36,7 @@ type Subnet struct {
 // string, returns Subnet struct and error
 func (c *Client) GetSubnet(subnetID string) (Subnet, error) {
 	var subnetData Subnet
-	req, _ := http.NewRequest("GET", "https://"+c.ServerURL+"/api/"+c.Application+"/subnets/"+subnetID+"/", nil)
+	req, _ := http.NewRequest("GET", c.ServerURL+"/api/"+c.Application+"/subnets/"+subnetID+"/", nil)
 	body, err := c.Do(req)
 	if err != nil {
 		return subnetData, err

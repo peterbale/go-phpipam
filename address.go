@@ -83,7 +83,7 @@ type UpdateAddress struct {
 // string, returns Address struct and error
 func (c *Client) GetAddress(addressID string) (Address, error) {
 	var addressData Address
-	req, _ := http.NewRequest("GET", "https://"+c.ServerURL+"/api/"+c.Application+"/addresses/"+addressID+"/", nil)
+	req, _ := http.NewRequest("GET", c.ServerURL+"/api/"+c.Application+"/addresses/"+addressID+"/", nil)
 	body, err := c.Do(req)
 	if err != nil {
 		return addressData, err
@@ -104,7 +104,7 @@ func (c *Client) GetAddress(addressID string) (Address, error) {
 // hostname string, returns AddressSearch struct and error
 func (c *Client) GetAddressSearch(searchHostname string) (AddressSearch, error) {
 	var addressSearchData AddressSearch
-	req, _ := http.NewRequest("GET", "https://"+c.ServerURL+"/api/"+c.Application+"/addresses/search_hostname/"+searchHostname+"/", nil)
+	req, _ := http.NewRequest("GET", c.ServerURL+"/api/"+c.Application+"/addresses/search_hostname/"+searchHostname+"/", nil)
 	body, err := c.Do(req)
 	if err != nil {
 		return addressSearchData, err
@@ -125,7 +125,7 @@ func (c *Client) GetAddressSearch(searchHostname string) (AddressSearch, error) 
 // using addressID string, returns AddressPring struct and error
 func (c *Client) GetAddressPing(addressID string) (AddressPing, error) {
 	var addressPingData AddressPing
-	req, _ := http.NewRequest("GET", "https://"+c.ServerURL+"/api/"+c.Application+"/addresses/"+addressID+"/ping/", nil)
+	req, _ := http.NewRequest("GET", c.ServerURL+"/api/"+c.Application+"/addresses/"+addressID+"/ping/", nil)
 	body, err := c.Do(req)
 	if err != nil {
 		return addressPingData, err
@@ -142,11 +142,13 @@ func (c *Client) GetAddressPing(addressID string) (AddressPing, error) {
 	return addressPingData, nil
 }
 
-// DeleteAddress Client pointer method to delete a phpipam address using
-// addressID string, returns AddressDelete struct and error
+/*
+DeleteAddress Client pointer method to delete a phpipam address using
+addressID string, returns AddressDelete struct and error
+*/
 func (c *Client) DeleteAddress(addressID string) (AddressDelete, error) {
 	var addressDeleteData AddressDelete
-	req, _ := http.NewRequest("DELETE", "https://"+c.ServerURL+"/api/"+c.Application+"/addresses/"+addressID+"/", nil)
+	req, _ := http.NewRequest("DELETE", c.ServerURL+"/api/"+c.Application+"/addresses/"+addressID+"/", nil)
 	body, err := c.Do(req)
 	if err != nil {
 		return addressDeleteData, err
@@ -161,13 +163,15 @@ func (c *Client) DeleteAddress(addressID string) (AddressDelete, error) {
 	return addressDeleteData, nil
 }
 
-// CreateAddressFirstFree Client pointer method to create the first avalible
-// phpipam address (starting from the top of the subnet) using subnetID string,
-// hostname string and owner string, returns AddressFirstFree struct and error
+/*
+CreateAddressFirstFree Client pointer method to create the first avalible
+phpipam address (starting from the top of the subnet) using subnetID string,
+hostname string and owner string, returns AddressFirstFree struct and error
+*/
 func (c *Client) CreateAddressFirstFree(subnetID string, hostname string, owner string) (AddressFirstFree, error) {
 	var addressFirstFreeData AddressFirstFree
 	reqBody := "hostname=" + hostname + "&owner=" + owner
-	req, _ := http.NewRequest("POST", "https://"+c.ServerURL+"/api/"+c.Application+"/addresses/first_free/"+subnetID+"/", strings.NewReader(reqBody))
+	req, _ := http.NewRequest("POST", c.ServerURL+"/api/"+c.Application+"/addresses/first_free/"+subnetID+"/", strings.NewReader(reqBody))
 	body, err := c.Do(req)
 	if err != nil {
 		return addressFirstFreeData, err
@@ -186,7 +190,7 @@ func (c *Client) CreateAddressFirstFree(subnetID string, hostname string, owner 
 // address string, returns AddressSearchIP struct and error
 func (c *Client) GetAddressSearchIP(address string) (AddressSearchIP, error) {
 	var addressSearchIPData AddressSearchIP
-	req, _ := http.NewRequest("GET", "https://"+c.ServerURL+"/api/"+c.Application+"/addresses/search/"+address+"/", nil)
+	req, _ := http.NewRequest("GET", c.ServerURL+"/api/"+c.Application+"/addresses/search/"+address+"/", nil)
 	body, err := c.Do(req)
 	if err != nil {
 		return addressSearchIPData, err
@@ -207,7 +211,7 @@ func (c *Client) GetAddressSearchIP(address string) (AddressSearchIP, error) {
 func (c *Client) PatchUpdateAddress(hostname string, addressID string) (UpdateAddress, error) {
 	var updateAddressData UpdateAddress
 	reqBody := "hostname=" + hostname
-	req, _ := http.NewRequest("PATCH", "https://"+c.ServerURL+"/api/"+c.Application+"/addresses/"+addressID+"/", strings.NewReader(reqBody))
+	req, _ := http.NewRequest("PATCH", c.ServerURL+"/api/"+c.Application+"/addresses/"+addressID+"/", strings.NewReader(reqBody))
 	body, err := c.Do(req)
 	if err != nil {
 		return updateAddressData, err
