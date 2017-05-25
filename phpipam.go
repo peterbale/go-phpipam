@@ -5,12 +5,16 @@ import (
 	"net/http"
 )
 
+// Client struct to define the phpipam master client
 type Client struct {
 	Token       string
-	ServerUrl   string
+	ServerURL   string
 	Application string
 }
 
+// New method for all users to call to create a client using hostname string,
+// application string, username string and password string, returns Client
+// pointer and error
 func New(hostname string, application string, username string, password string) (*Client, error) {
 	apiKey, err := NewLogin(hostname, application, username, password)
 	if err != nil {
@@ -18,11 +22,13 @@ func New(hostname string, application string, username string, password string) 
 	}
 	return &Client{
 		Token:       apiKey.Data.Token,
-		ServerUrl:   hostname,
+		ServerURL:   hostname,
 		Application: application,
 	}, nil
 }
 
+// Do Client pointer method for all downstream methods to call to run requested
+// action using req http.Request pointer, returns byte slice and error
 func (c *Client) Do(req *http.Request) ([]byte, error) {
 	var body []byte
 	client := &http.Client{}

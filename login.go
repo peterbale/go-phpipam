@@ -7,6 +7,7 @@ import (
 	"net/http"
 )
 
+// Login struct to define phpipam login return data
 type Login struct {
 	Code    int  `json:"code"`
 	Success bool `json:"success"`
@@ -18,10 +19,13 @@ type Login struct {
 	Message string `json:"message"`
 }
 
-func NewLogin(server_url string, application string, username string, password string) (*Login, error) {
+// NewLogin method to login to phpipam using server_url string, application
+// string, username string and password string, returns Login struct pointer
+// and error
+func NewLogin(serverURL string, application string, username string, password string) (*Login, error) {
 	var loginData = new(Login)
 	client := &http.Client{}
-	req, _ := http.NewRequest("POST", "https://"+server_url+"/api/"+application+"/user/", nil)
+	req, _ := http.NewRequest("POST", "https://"+serverURL+"/api/"+application+"/user/", nil)
 	req.SetBasicAuth(username, password)
 	resp, err := client.Do(req)
 	if err != nil {

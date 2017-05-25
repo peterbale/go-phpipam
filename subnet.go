@@ -6,14 +6,15 @@ import (
 	"net/http"
 )
 
+// Subnet struct from phpipam
 type Subnet struct {
 	Code    int  `json:"code"`
 	Success bool `json:"success"`
 	Data    struct {
-		Id          string `json:"id"`
+		ID          string `json:"id"`
 		Subnet      string `json:"subnet"`
 		Mask        string `json:"mask"`
-		SectionId   string `json:"sectionId"`
+		SectionID   string `json:"sectionId"`
 		Description string `json:"description"`
 		IsFull      string `json:"isFull"`
 		Gateway     struct {
@@ -31,9 +32,11 @@ type Subnet struct {
 	Message string `json:"message"`
 }
 
-func (c *Client) GetSubnet(subnetId string) (Subnet, error) {
+// GetSubnet Client pointer method to get all phpipam subnet data using subnetID
+// string, returns Subnet struct and error
+func (c *Client) GetSubnet(subnetID string) (Subnet, error) {
 	var subnetData Subnet
-	req, _ := http.NewRequest("GET", "https://"+c.ServerUrl+"/api/"+c.Application+"/subnets/"+subnetId+"/", nil)
+	req, _ := http.NewRequest("GET", "https://"+c.ServerURL+"/api/"+c.Application+"/subnets/"+subnetID+"/", nil)
 	body, err := c.Do(req)
 	if err != nil {
 		return subnetData, err
