@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"net/http"
+	"net/url"
 	"strings"
 )
 
@@ -168,9 +169,14 @@ CreateAddressFirstFree Client pointer method to create the first avalible
 phpipam address (starting from the top of the subnet) using subnetID string,
 hostname string and owner string, returns AddressFirstFree struct and error
 */
-func (c *Client) CreateAddressFirstFree(subnetID string, hostname string, owner string) (AddressFirstFree, error) {
+func (c *Client) CreateAddressFirstFree(subnetID string, hostname string, owner string, description string) (AddressFirstFree, error) {
 	var addressFirstFreeData AddressFirstFree
-	reqBody := "hostname=" + hostname + "&owner=" + owner
+	var reqBody string
+	if len(description) > 0 {
+		reqBody = "hostname=" + hostname + "&owner=" + owner + "&description=" + url.QueryEscape(description)
+	} else {
+		reqBody = "hostname=" + hostname + "&owner=" + owner
+	}
 	req, _ := http.NewRequest("POST", c.ServerURL+"/api/"+c.Application+"/addresses/first_free/"+subnetID+"/", strings.NewReader(reqBody))
 	body, err := c.Do(req)
 	if err != nil {
