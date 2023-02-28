@@ -1,2 +1,1 @@
-# go-phpipam
-phpIPAM Golang Library
+# PHPIPAM Go Library
