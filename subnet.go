@@ -26,7 +26,7 @@ type Subnet struct {
 			Network       string `json:"Network"`
 			Broadcast     string `json:"Broadcast"`
 			BitMask       string `json:"Subnet bitmask"`
-			NumberOfHosts int    `json:"Number of hosts"`
+			NumberOfHosts string `json:"Number of hosts"`
 		} `json:"calculation"`
 	} `json:"data"`
 	Message string `json:"message"`
